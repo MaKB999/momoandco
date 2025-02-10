@@ -21,36 +21,60 @@ let layerControl = L.control.layers(null, {
     "France": franceLayer
 }, { collapsed: false }).addTo(map);
 
-// Function to load and add JSON data to the map
-function loadJSON(file, layer, color, layerName) {
-    fetch('data/' + file)
-        .then(response => response.json())
-        .then(data => {
-            let geoJsonLayer = L.geoJSON(data.data, {
+// List of mushroom types (without region prefixes)
+const mushrooms = [
+    "bolet-bai", "bolet-jaune", "cepe-bronze", "cepe-d-ete", "cepe-de-bordeaux",
+    "cepe-des-pins", "chanterelle-en-tube", "collybie-a-pied-veloute", "girolle",
+    "lactaire-delicieux", "lepiote-elevee", "morille-commune", "morille-conique",
+    "oronge", "pholiote-du-peuplier", "pied-de-mouton", "pleurote-en-huitre",
+    "russule-charbonniere", "sparassis-crepu", "trompette-de-la-mort"
+];
+
+// Function to load and merge JSON files for both regions
+function loadMushroomData(mushroom, suisseLayer, franceLayer) {
+    let suisseURL = `cmc/data/suisse-ouest-${mushroom}.json`;
+    let franceURL = `cmc/data/rhone-alpes-1-${mushroom}.json`;
+
+    Promise.all([
+        fetch(suisseURL).then(res => res.json()).catch(() => null),
+        fetch(franceURL).then(res => res.json()).catch(() => null)
+    ]).then(([suisseData, franceData]) => {
+        if (suisseData && suisseData.data) {
+            L.geoJSON(suisseData.data, {
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, {
                         radius: 6,
-                        fillColor: color,
+                        fillColor: "red",
                         color: "black",
                         weight: 1,
                         opacity: 1,
                         fillOpacity: 0.8
                     }).bindPopup(`<b>${feature.properties.name}</b>`);
                 }
-            });
+            }).addTo(suisseLayer);
+        }
 
-            // Add to layer group
-            geoJsonLayer.addTo(layer);
-
-            // Add layer to control toggle
-            layerControl.addOverlay(layer, layerName);
-        })
-        .catch(error => console.error('Error loading JSON:', error));
+        if (franceData && franceData.data) {
+            L.geoJSON(franceData.data, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, {
+                        radius: 6,
+                        fillColor: "blue",
+                        color: "black",
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    }).bindPopup(`<b>${feature.properties.name}</b>`);
+                }
+            }).addTo(franceLayer);
+        }
+    }).catch(error => console.error(`Error loading ${mushroom}:`, error));
 }
 
-// Load JSON layers and add them to the toggle menu
-loadJSON('suisse-ouest.json', suisseLayer, suisseColor, "Suisse");
-loadJSON('rhone-alpes-1.json', franceLayer, franceColor, "France");
+// Loop through all mushrooms and load them into the correct layers
+mushrooms.forEach(mushroom => {
+    loadMushroomData(mushroom, suisseLayer, franceLayer);
+});
 
 // Add layers to the map initially (optional)
 suisseLayer.addTo(map);
