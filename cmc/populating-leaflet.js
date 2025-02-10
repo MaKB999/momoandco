@@ -8,15 +8,21 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Create layer groups for each region
-let suisseOuestLayer = L.layerGroup().addTo(map);
-let rhoneAlpesLayer = L.layerGroup().addTo(map);
+let suisseLayer = L.layerGroup();
+let franceLayer = L.layerGroup();
 
 // Define colors for each region
-const suisseOuestColor = "red";
-const rhoneAlpesColor = "blue";
+const suisseColor = "red";
+const franceColor = "blue";
+
+// Add layer control to toggle visibility
+let layerControl = L.control.layers(null, {
+    "Suisse": suisseLayer,
+    "France": franceLayer
+}, { collapsed: false }).addTo(map);
 
 // Function to load and add JSON data to the map
-function loadJSON(file, layer, color) {
+function loadJSON(file, layer, color, layerName) {
     fetch('data/' + file)
         .then(response => response.json())
         .then(data => {
@@ -32,20 +38,23 @@ function loadJSON(file, layer, color) {
                     }).bindPopup(`<b>${feature.properties.name}</b>`);
                 }
             });
+
+            // Add to layer group
             geoJsonLayer.addTo(layer);
+
+            // Add layer to control toggle
+            layerControl.addOverlay(layer, layerName);
         })
         .catch(error => console.error('Error loading JSON:', error));
 }
 
-// Load both JSON files with designated colors
-loadJSON('suisse-ouest.json', suisseOuestLayer, suisseOuestColor);
-loadJSON('rhone-alpes-1.json', rhoneAlpesLayer, rhoneAlpesColor);
+// Load JSON layers and add them to the toggle menu
+loadJSON('suisse-ouest.json', suisseLayer, suisseColor, "Suisse");
+loadJSON('rhone-alpes-1.json', franceLayer, franceColor, "France");
 
-// Add layer control to toggle visibility
-L.control.layers(null, {
-    "Suisse-Ouest Mushrooms": suisseOuestLayer,
-    "Rhone-Alpes Mushrooms": rhoneAlpesLayer
-}, { collapsed: false }).addTo(map);
+// Add layers to the map initially (optional)
+suisseLayer.addTo(map);
+franceLayer.addTo(map);
 
 // Geolocation - Show user's current position
 if ("geolocation" in navigator) {
