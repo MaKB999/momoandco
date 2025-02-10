@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Quick Start - Leaflet</title>
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+	<link rel="stylesheet" href="script.css">
+
+</head>
+<body>
+
+<div id="map" style="height: 800px;"></div>
+
+<label><input type="radio" name="jsonFile" value="suisse-ouest-bolet-bai.json">suisse-ouest-bolet-bai</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-bolet-jaune.json">suisse-ouest-bolet-jaune</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-cepe-bronze.json">suisse-ouest-cepe-bronze</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-cepe-d-ete.json">suisse-ouest-cepe-d-ete</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-cepe-de-bordeaux.json">suisse-ouest-cepe-de-bordeaux</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-cepe-des-pins.json">suisse-ouest-cepe-des-pins</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-chanterelle-en-tube.json">suisse-ouest-chanterelle-en-tube</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-collybie-à-pied-velouté.json">suisse-ouest-collybie-à-pied-velouté</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-girolle.json">suisse-ouest-girolle</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-lactaire-délicieux.json">suisse-ouest-lactaire-délicieux</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-lépiote-élevée.json">suisse-ouest-lépiote-élevée</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-morille-commune.json">suisse-ouest-morille-commune</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-morille-conique.json">suisse-ouest-morille-conique</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-oronge.json">suisse-ouest-oronge</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-pholiote-du-peuplier.json">suisse-ouest-pholiote-du-peuplier</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-pied-de-mouton.json">suisse-ouest-pied-de-mouton</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-pleurote-en-huître.json">suisse-ouest-pleurote-en-huître</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-russule-charbonnière.json">suisse-ouest-russule-charbonnière</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-sparassis-crépu.json">suisse-ouest-sparassis-crépu</label>
+<label><input type="radio" name="jsonFile" value="suisse-ouest-trompette-de-la-mort.json">suisse-ouest-trompette-de-la-mort</label>
+
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-bolet-bai.json">rhone-alpes-1-bolet-bai</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-bolet-jaune.json">rhone-alpes-1-bolet-jaune</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-cepe-bronze.json">rhone-alpes-1-cepe-bronze</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-cepe-d-ete.json">rhone-alpes-1-cepe-d-ete</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-cepe-de-bordeaux.json">rhone-alpes-1-cepe-de-bordeaux</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-cepe-des-pins.json">rhone-alpes-1-cepe-des-pins</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-chanterelle-en-tube.json">rhone-alpes-1-chanterelle-en-tube</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-collybie-à-pied-velouté.json">rhone-alpes-1-collybie-à-pied-velouté</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-girolle.json">rhone-alpes-1-girolle</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-lactaire-délicieux.json">rhone-alpes-1-lactaire-délicieux</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-lépiote-élevée.json">rhone-alpes-1-lépiote-élevée</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-morille-commune.json">rhone-alpes-1-morille-commune</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-morille-conique.json">rhone-alpes-1-morille-conique</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-oronge.json">rhone-alpes-1-oronge</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-pholiote-du-peuplier.json">rhone-alpes-1-pholiote-du-peuplier</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-pied-de-mouton.json">rhone-alpes-1-pied-de-mouton</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-pleurote-en-huître.json">rhone-alpes-1-pleurote-en-huître</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-russule-charbonnière.json">rhone-alpes-1-russule-charbonnière</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-sparassis-crépu.json">rhone-alpes-1-sparassis-crépu</label>
+<label><input type="radio" name="jsonFile" value="rhone-alpes-1-trompette-de-la-mort.json">rhone-alpes-1-trompette-de-la-mort</label>
+
+<pre id="jsonData"></pre>
+
+<script src="populating-leaflet.js"></script>
+
+</body>
+</html>
