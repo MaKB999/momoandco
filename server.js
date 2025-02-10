@@ -2,14 +2,14 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-const PORT = process.env.PORT || 8080; // Use Render's dynamic port
+const PORT = process.env.PORT || 8080;
 
-app.use(express.static(path.join(__dirname, 'cmc')));
+// Serve static files from the "cmc/data" folder
+app.use('/cmc/data', express.static(path.join(__dirname, 'cmc/data')));
 
-app.get('/', async (req, res) => {
-    res.sendFile(path.join(__dirname, 'cmc', 'index.html'));
-});
+// Serve static files from "cmc" folder (if needed)
+app.use('/cmc', express.static(path.join(__dirname, 'cmc')));
 
 app.listen(PORT, () => {
-    console.log(`Server successfully running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
