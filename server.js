@@ -4,10 +4,11 @@ const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-// ✅ Serve static files from the "cmc" folder
+// Serve static files from "cmc" and its subdirectories
 app.use(express.static(path.join(__dirname, 'cmc')));
+app.use('/data', express.static(path.join(__dirname, 'cmc', 'data'))); // ✅ Serve JSON files
 
-// ✅ Route to serve index.html when visiting "/"
+// Serve index.html when visiting "/"
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'cmc', 'index.html'));
 });
