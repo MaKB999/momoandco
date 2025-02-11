@@ -19,7 +19,7 @@ app.use((req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-        res.setHeader('WWW-Authenticate', 'Basic realm=\"Mushroom Map\"");
+        res.setHeader('WWW-Authenticate', 'Basic realm="Mushroom Map"');
         return res.status(401).send('Authentication required');
     }
 
