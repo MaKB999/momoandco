@@ -32,8 +32,8 @@ const mushrooms = [
 
 // Function to load and merge JSON files for both regions
 function loadMushroomData(mushroom) {
-    let suisseURL = `cmc/data/suisse-ouest-${mushroom}.json`;
-    let franceURL = `cmc/data/rhone-alpes-1-${mushroom}.json`;
+    let suisseURL = `data/suisse-ouest-${mushroom}.json`;
+    let franceURL = `data/rhone-alpes-1-${mushroom}.json`;
 
     console.log(`Fetching: ${suisseURL} and ${franceURL}`);
 
