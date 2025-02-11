@@ -10,12 +10,16 @@ const AUTH_USERS = {
     "Clement": "Momo"
 };
 
-// ✅ Authentication Middleware
+// ✅ Authentication Middleware (Skip /health route)
 app.use((req, res, next) => {
+    if (req.path === "/health") {
+        return next(); // ✅ Skip authentication for /health
+    }
+
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-        res.setHeader('WWW-Authenticate', 'Basic realm="Mushroom Map"');
+        res.setHeader('WWW-Authenticate', 'Basic realm=\"Mushroom Map\"");
         return res.status(401).send('Authentication required');
     }
 
@@ -23,10 +27,10 @@ app.use((req, res, next) => {
     const [username, password] = credentials;
 
     if (AUTH_USERS[username] && AUTH_USERS[username] === password) {
-        return next(); // User authenticated
+        return next(); // ✅ User authenticated
     }
 
-    res.setHeader('WWW-Authenticate', 'Basic realm="Mushroom Map"');
+    res.setHeader('WWW-Authenticate', 'Basic realm=\"Mushroom Map\"");
     return res.status(401).send('Unauthorized');
 });
 
