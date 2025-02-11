@@ -4,13 +4,13 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Allowed users with password "Momo"
+// ✅ Allowed users with password "Momo"
 const AUTH_USERS = {
     "Damien": "Momo",
     "Clement": "Momo"
 };
 
-// Authentication Middleware
+// ✅ Authentication Middleware
 app.use((req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -30,15 +30,25 @@ app.use((req, res, next) => {
     return res.status(401).send('Unauthorized');
 });
 
-// Serve static files from the "cmc" folder
-app.use(express.static(path.join(__dirname, 'cmc')));
+// ✅ Serve static files from "cmc" and "cmc/data"
+app.use('/cmc', express.static(path.join(__dirname, 'cmc')));
+app.use('/cmc/data', express.static(path.join(__dirname, 'cmc/data')));
 
-// Serve index.html
+// ✅ Serve index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'cmc', 'index.html'));
 });
 
-// Start the server
+// ✅ Test JSON file serving
+app.get('/test-json', (req, res) => {
+    res.sendFile(path.join(__dirname, 'cmc/data', 'suisse-ouest-bolet-bai.json'), err => {
+        if (err) {
+            res.status(404).send('JSON file not found.');
+        }
+    });
+});
+
+// ✅ Start the server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
