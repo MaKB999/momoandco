@@ -21,7 +21,7 @@ let layerControl = L.control.layers(null, {
     "France": franceLayer
 }, { collapsed: false }).addTo(map);
 
-// List of mushroom types (without region prefixes)
+// List of mushroom types (combined Suisse & France)
 const mushrooms = [
     "bolet-bai", "bolet-jaune", "cepe-bronze", "cepe-d-ete", "cepe-de-bordeaux",
     "cepe-des-pins", "chanterelle-en-tube", "collybie-a-pied-veloute", "girolle",
@@ -31,9 +31,11 @@ const mushrooms = [
 ];
 
 // Function to load and merge JSON files for both regions
-function loadMushroomData(mushroom, suisseLayer, franceLayer) {
+function loadMushroomData(mushroom) {
     let suisseURL = `cmc/data/suisse-ouest-${mushroom}.json`;
     let franceURL = `cmc/data/rhone-alpes-1-${mushroom}.json`;
+
+    console.log(`Fetching: ${suisseURL} and ${franceURL}`);
 
     Promise.all([
         fetch(suisseURL).then(res => res.json()).catch(() => null),
@@ -71,9 +73,28 @@ function loadMushroomData(mushroom, suisseLayer, franceLayer) {
     }).catch(error => console.error(`Error loading ${mushroom}:`, error));
 }
 
-// Loop through all mushrooms and load them into the correct layers
-mushrooms.forEach(mushroom => {
-    loadMushroomData(mushroom, suisseLayer, franceLayer);
+// Dropdown to select mushrooms
+let mushroomSelect = L.control({ position: 'bottomleft' });
+mushroomSelect.onAdd = function(map) {
+    let div = L.DomUtil.create('div', 'mushroom-select');
+    let selectHTML = '<select id="mushroomDropdown"><option value="">Select Mushroom</option>';
+    mushrooms.forEach(mushroom => {
+        selectHTML += `<option value="${mushroom}">${mushroom.replace(/-/g, ' ')}</option>`;
+    });
+    selectHTML += '</select>';
+    div.innerHTML = selectHTML;
+    return div;
+};
+mushroomSelect.addTo(map);
+
+// Load selected mushroom
+document.getElementById('mushroomDropdown').addEventListener('change', function() {
+    let selectedMushroom = this.value;
+    if (selectedMushroom) {
+        suisseLayer.clearLayers();
+        franceLayer.clearLayers();
+        loadMushroomData(selectedMushroom);
+    }
 });
 
 // Add layers to the map initially (optional)
