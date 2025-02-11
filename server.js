@@ -48,6 +48,11 @@ app.get('/test-json', (req, res) => {
     });
 });
 
+// ✅ Health Check Route for UptimeRobot (No Authentication Required)
+app.get('/health', (req, res) => {
+    res.status(200).send("OK");
+});
+
 // ✅ Start the server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
