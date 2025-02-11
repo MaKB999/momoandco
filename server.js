@@ -30,7 +30,7 @@ app.use((req, res, next) => {
         return next(); // ✅ User authenticated
     }
 
-    res.setHeader('WWW-Authenticate', 'Basic realm=\"Mushroom Map"");
+    res.setHeader('WWW-Authenticate', 'Basic realm="Mushroom Map"');
     return res.status(401).send('Unauthorized');
 });
 
