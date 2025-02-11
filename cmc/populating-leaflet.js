@@ -14,6 +14,7 @@ let franceLayer = L.layerGroup();
 // Define colors for each region
 const suisseColor = "red";
 const franceColor = "blue";
+const userLocationColor = "red"; // Change cursor geolocation to red
 
 // Add layer control to toggle visibility
 let layerControl = L.control.layers(null, {
@@ -21,19 +22,19 @@ let layerControl = L.control.layers(null, {
     "France": franceLayer
 }, { collapsed: false }).addTo(map);
 
-// List of mushroom types (combined Suisse & France)
+// List of mushroom types with accents
 const mushrooms = [
-    "bolet-bai", "bolet-jaune", "cepe-bronze", "cepe-d-ete", "cepe-de-bordeaux",
-    "cepe-des-pins", "chanterelle-en-tube", "collybie-a-pied-veloute", "girolle",
-    "lactaire-delicieux", "lepiote-elevee", "morille-commune", "morille-conique",
-    "oronge", "pholiote-du-peuplier", "pied-de-mouton", "pleurote-en-huitre",
-    "russule-charbonniere", "sparassis-crepu", "trompette-de-la-mort"
+    "bolet-bai|Bolet Bai", "bolet-jaune|Bolet Jaune", "cepe-bronze|Cèpe Bronzé", "cepe-d-ete|Cèpe d'Été", "cepe-de-bordeaux|Cèpe de Bordeaux",
+    "cepe-des-pins|Cèpe des Pins", "chanterelle-en-tube|Chanterelle en Tube", "collybie-a-pied-veloute|Collybie à Pied Velouté", "girolle|Girolle",
+    "lactaire-delicieux|Lactaire Délicieux", "lepiote-elevee|Lépiote Élevée", "morille-commune|Morille Commune", "morille-conique|Morille Conique",
+    "oronge|Oronge", "pholiote-du-peuplier|Pholiote du Peuplier", "pied-de-mouton|Pied de Mouton", "pleurote-en-huitre|Pleurote en Huître",
+    "russule-charbonniere|Russule Charbonnière", "sparassis-crepu|Sparassis Crépu", "trompette-de-la-mort|Trompette de la Mort"
 ];
 
 // Function to load and merge JSON files for both regions
 function loadMushroomData(mushroom) {
-    let suisseURL = `data/suisse-ouest-${mushroom}.json`;
-    let franceURL = `data/rhone-alpes-1-${mushroom}.json`;
+    let suisseURL = `cmc/data/suisse-ouest-${mushroom}.json`;
+    let franceURL = `cmc/data/rhone-alpes-1-${mushroom}.json`;
 
     console.log(`Fetching: ${suisseURL} and ${franceURL}`);
 
@@ -79,7 +80,8 @@ mushroomSelect.onAdd = function(map) {
     let div = L.DomUtil.create('div', 'mushroom-select');
     let selectHTML = '<select id="mushroomDropdown"><option value="">Select Mushroom</option>';
     mushrooms.forEach(mushroom => {
-        selectHTML += `<option value="${mushroom}">${mushroom.replace(/-/g, ' ')}</option>`;
+        let [value, label] = mushroom.split('|');
+        selectHTML += `<option value="${value}">${label}</option>`;
     });
     selectHTML += '</select>';
     div.innerHTML = selectHTML;
@@ -108,7 +110,14 @@ if ("geolocation" in navigator) {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
 
-            let userMarker = L.marker([lat, lon]).addTo(map);
+            let userMarker = L.circleMarker([lat, lon], {
+                radius: 8,
+                fillColor: userLocationColor,
+                color: "black",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 1
+            }).addTo(map);
             userMarker.bindPopup("You are here!").openPopup();
 
             map.setView([lat, lon], 13);
