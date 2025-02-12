@@ -10,16 +10,18 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Create layer groups for each region
 let suisseLayer = L.layerGroup();
 let franceLayer = L.layerGroup();
+let userMarkers = L.layerGroup().addTo(map);
 
 // Define colors for each region
-const suisseColor = "red";
+const suisseColor = "blue";
 const franceColor = "blue";
 const userLocationColor = "red"; // Change cursor geolocation to red
 
 // Add layer control to toggle visibility
 let layerControl = L.control.layers(null, {
     "Suisse": suisseLayer,
-    "France": franceLayer
+    "France": franceLayer,
+    "My Markers": userMarkers
 }, { collapsed: false }).addTo(map);
 
 // List of mushroom types with accents
@@ -47,7 +49,7 @@ function loadMushroomData(mushroom) {
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, {
                         radius: 6,
-                        fillColor: "red",
+                        fillColor: suisseColor,
                         color: "black",
                         weight: 1,
                         opacity: 1,
@@ -62,7 +64,7 @@ function loadMushroomData(mushroom) {
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, {
                         radius: 6,
-                        fillColor: "blue",
+                        fillColor: franceColor,
                         color: "black",
                         weight: 1,
                         opacity: 1,
@@ -73,6 +75,18 @@ function loadMushroomData(mushroom) {
         }
     }).catch(error => console.error(`Error loading ${mushroom}:`, error));
 }
+
+// Function to add a marker on long press
+map.on('contextmenu', function(event) {
+    let selectedMushroom = document.getElementById('mushroomDropdown').value;
+    if (!selectedMushroom) {
+        alert("Please select a mushroom before adding a marker.");
+        return;
+    }
+
+    let marker = L.marker(event.latlng).addTo(userMarkers);
+    marker.bindPopup(`<b>${selectedMushroom.replace(/-/g, ' ')}</b><br>Marked location`).openPopup();
+});
 
 // Dropdown to select mushrooms
 let mushroomSelect = L.control({ position: 'bottomleft' });
